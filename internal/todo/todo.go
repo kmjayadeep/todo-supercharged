@@ -1,13 +1,14 @@
 package todo
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"net/http"
-	"time"
 )
 
 type Todo struct {
@@ -71,4 +72,36 @@ func (tc *TodoController) AddTodo(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, doc)
+}
+
+func (tc *TodoController) DeleteTodo(c *gin.Context) {
+
+	id := c.Param("id")
+	idObj, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		log.Error(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		return
+	}
+
+	collection := tc.Db.Collection("todo")
+
+	filter := bson.D{
+		{Key: "_id", Value: idObj},
+	}
+
+	res, err := collection.DeleteOne(c.Request.Context(), filter)
+
+	if err != nil {
+		log.Error(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+		return
+	}
+
+	if res.DeletedCount == 1 {
+		c.String(http.StatusOK, "Deleted successfully")
+	} else {
+		c.String(http.StatusNotFound, "Unable to find the todo")
+	}
 }
