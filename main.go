@@ -2,14 +2,14 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"time"
-	// "go.mongodb.org/mongo-driver/bson"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"net/http"
+	"time"
+
+	"github.com/kmjayadeep/todo-supercharged/internal/todo"
 )
 
 func init() {
@@ -35,9 +35,12 @@ func main() {
 		panic(err)
 	}
 
-	var res string
-	collection := client.Database("testdb").Collection("people")
-	err = collection.FindOne(context.Background(), nil).Decode(&res)
+	log.Info("DB connected, starting server")
+
+	db := client.Database("todo")
+	todoController := todo.TodoController{
+		Db: db,
+	}
 
 	app := gin.Default()
 
@@ -46,6 +49,9 @@ func main() {
 			"message": "Welcome to Todo supercharged",
 		})
 	})
+
+	app.GET("/v1/todo", todoController.GetTodos)
+	app.POST("/v1/todo", todoController.AddTodo)
 
 	app.Run()
 
