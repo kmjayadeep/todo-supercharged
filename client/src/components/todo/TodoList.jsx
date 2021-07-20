@@ -8,7 +8,7 @@ export function TodoList() {
   const [todos, setTodos] = useState([]);
 
   const refresh = () => {
-    fetchTodos().then((data) => setTodos(data));
+    fetchTodos().then((data) => setTodos(data || []));
   };
 
   useEffect(() => {
