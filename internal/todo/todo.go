@@ -59,7 +59,7 @@ func (tc *TodoController) AddTodo(c *gin.Context) {
 	}
 
 	todo.ID = primitive.NewObjectID()
-	todo.CompletedAt = time.Now()
+	todo.CreatedAt = time.Now()
 	todo.Completed = false
 
 	collection := tc.Db.Collection("todo")
