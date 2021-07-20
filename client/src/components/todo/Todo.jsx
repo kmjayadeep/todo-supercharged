@@ -26,24 +26,23 @@ const useStyles = makeStyles({
     marginBottom: 12,
   },
   done: {
-    color: "#0db70d"
-  }
+    color: "#0db70d",
+  },
 });
 
 export function Todo({ todo, refresh }) {
   const classes = useStyles();
 
-  let cls = ""
-  if(todo.completed) {
-    cls = cls + " " + classes.done
+  let cls = "";
+  if (todo.completed) {
+    cls = cls + " " + classes.done;
   }
 
   return (
     <Card className={classes.root} color="secondary">
       <CardContent>
         <Typography variant="h5" component="h2" className={cls}>
-    <b>
-          {todo.title}</b>
+          <b>{todo.title}</b>
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
           {new Date(todo.createdAt).toLocaleString()}
