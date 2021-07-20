@@ -58,6 +58,7 @@ func (tc *TodoController) AddTodo(c *gin.Context) {
 		return
 	}
 
+	todo.ID = primitive.NewObjectID()
 	todo.CompletedAt = time.Now()
 	todo.Completed = false
 
@@ -103,5 +104,42 @@ func (tc *TodoController) DeleteTodo(c *gin.Context) {
 		c.String(http.StatusOK, "Deleted successfully")
 	} else {
 		c.String(http.StatusNotFound, "Unable to find the todo")
+	}
+}
+
+func (tc *TodoController) MarkDone(c *gin.Context) {
+
+	id := c.Param("id")
+	idObj, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		log.Error(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		return
+	}
+
+	log.Info("deleting todo with id ", id)
+
+	collection := tc.Db.Collection("todo")
+
+	update := bson.D{
+		{Key: "$set", Value: bson.D{
+			{Key: "completed", Value: true},
+			{Key: "completedAt", Value: time.Now()},
+		}},
+	}
+
+	res, err := collection.UpdateByID(c.Request.Context(), idObj, update)
+
+	if err != nil {
+		log.Error(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+		return
+	}
+
+	if res.ModifiedCount == 1 {
+		c.String(http.StatusOK, "Updated successfully")
+	} else {
+		c.String(http.StatusNotFound, "Couldn't update todo")
 	}
 }

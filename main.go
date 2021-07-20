@@ -53,6 +53,7 @@ func main() {
 	app.GET("/v1/todo", todoController.GetTodos)
 	app.POST("/v1/todo", todoController.AddTodo)
 	app.DELETE("/v1/todo/:id", todoController.DeleteTodo)
+	app.PUT("/v1/todo/:id/done", todoController.MarkDone)
 
 	app.Run()
 
