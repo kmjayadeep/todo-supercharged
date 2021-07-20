@@ -7,5 +7,11 @@ export function fetchTodos() {
 export function markAsDone(id) {
   return fetch(`${BASE_URL}/todo/${id}/done`, {
     method: "PUT",
-  }).then((response) => response.json());
+  });
+}
+
+export function deleteTodo(id) {
+  return fetch(`${BASE_URL}/todo/${id}`, {
+    method: "DELETE",
+  });
 }
