@@ -15,3 +15,17 @@ export function deleteTodo(id) {
     method: "DELETE",
   });
 }
+
+export function addTodo(title, description) {
+  const body = JSON.stringify({
+    title,
+    description
+  });
+  return fetch(`${BASE_URL}/todo`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body
+  });
+}
