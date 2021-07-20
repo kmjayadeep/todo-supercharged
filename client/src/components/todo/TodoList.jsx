@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchTodos } from './todo.svc';
 import { Todo } from './Todo';
+import Grid from '@material-ui/core/Grid';
 
 
 export function TodoList() {
@@ -11,11 +12,13 @@ export function TodoList() {
   }, []);
 
   return (
-    <>
+    <Grid container>
     {todos.map((todo) => (
-      <Todo todo={todo}/>
+      <Grid item xs={4} key={todo._id}>
+        <Todo todo={todo}/>
+      </Grid>
       ))}
-    </>
+    </Grid>
   )
 }
 

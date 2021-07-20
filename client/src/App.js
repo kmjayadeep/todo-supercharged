@@ -8,7 +8,7 @@ import "./App.css";
 
 function App() {
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="lg">
       <AppBar position="static">
         <Toolbar>
           <Typography variant="subtitle1">Todo</Typography>
