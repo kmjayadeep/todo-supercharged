@@ -44,6 +44,9 @@ func main() {
 
 	app := gin.Default()
 
+	app.StaticFile("/", "./client/build/index.html")
+	app.Static("/static", "./client/build/static")
+
 	app.GET("/v1", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Welcome to Todo supercharged",
