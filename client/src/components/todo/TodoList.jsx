@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import { fetchTodos } from './todo.svc';
 import { Todo } from './Todo';
 import Grid from '@material-ui/core/Grid';
@@ -7,15 +7,19 @@ import Grid from '@material-ui/core/Grid';
 export function TodoList() {
   const [ todos, setTodos ] = useState([])
 
-  useEffect(()=>{
+  const refresh = () =>{
     fetchTodos().then(data=>setTodos(data));
+  }
+
+  useEffect(()=>{
+    refresh()
   }, []);
 
   return (
     <Grid container>
     {todos.map((todo) => (
       <Grid item xs={4} key={todo._id}>
-        <Todo todo={todo}/>
+        <Todo todo={todo} refresh={refresh}/>
       </Grid>
       ))}
     </Grid>

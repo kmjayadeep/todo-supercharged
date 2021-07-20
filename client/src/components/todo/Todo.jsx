@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import DoneIcon from "@material-ui/icons/Done";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { markAsDone } from "./todo.svc";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -26,7 +27,7 @@ const useStyles = makeStyles({
   },
 });
 
-export function Todo({ todo }) {
+export function Todo({ todo, refresh }) {
   const classes = useStyles();
 
   return (
@@ -44,7 +45,9 @@ export function Todo({ todo }) {
       </CardContent>
       <CardActions>
         {todo.completed || (
-          <Button size="small" color="primary">
+          <Button size="small" color="primary" onClick={()=>{
+            markAsDone(todo._id).then(()=>refresh());
+          }}>
             <DoneIcon />
             Mark as done
           </Button>
